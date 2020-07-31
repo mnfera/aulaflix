@@ -1,0 +1,16 @@
+{
+    "categorias": [
+        {
+            "id": 1,
+            "nome": "Ensino Fundamental",
+            "descrição": "6º ao 9º ano",
+            "cor": "#cbd1ff"
+        },
+        {
+            "id": 2,
+            "nome": "Ensino Médio",
+            "descrição": "1ª a 3ª série",
+            "cor": "#cbd1ff"
+        }
+    ]
+}
