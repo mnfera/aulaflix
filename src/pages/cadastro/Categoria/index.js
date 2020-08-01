@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormField';
 import Button from '../../../components/Button';
+import useForm from '../../../hooks/useForm';
 
 function CadastroCategoria() {
   const valoresIniciais = {
@@ -11,25 +11,14 @@ function CadastroCategoria() {
     cor: '#9D2FF7',
   };
 
+  const { MudarValores, values, clearForm } = useForm(valoresIniciais);
+
   const [categorias, setCategorias] = useState([]);
-  const [values, setValues] = useState(valoresIniciais);
-
-  function setValue(chave, valor) {
-    setValues({
-      ...values,
-      [chave]: valor,
-    });
-  }
-
-  function MudarValores(infosDoEvento) {
-    setValue(
-      infosDoEvento.target.getAttribute('name'),
-      infosDoEvento.target.value,
-    );
-  }
 
   useEffect(() => {
-    const URL_DB = 'http://localhost:8080/categorias';
+    const URL_DB = window.location.hostname.includes('localhost')
+      ? 'http://localhost:8080/categorias'
+      : 'https://mnaulaflix.herokuapp.com/categorias';
     fetch(URL_DB)
       .then(async (respostaDoServidor) => {
         const resposta = await respostaDoServidor.json();
@@ -53,12 +42,12 @@ function CadastroCategoria() {
           values,
         ]);
 
-        setValues(valoresIniciais);
+        clearForm();
       }}
       >
 
         <FormField
-          label="Nome da categoria"
+          label="Título da categoria"
           type="text"
           name="nome"
           value={values.nome}
@@ -93,24 +82,22 @@ function CadastroCategoria() {
       <table>
         <thead>
           <tr>
-            <th>Nome</th>
-            <th>Descrição</th>
+            <th>Categorias Cadastradas</th>
           </tr>
 
         </thead>
         <tbody>
-          {categorias.map((categoria, indice) => (
-            <tr key={`${categoria}${indice}`}>
-              <td>{categoria.nome}</td>
-              <td>{categoria.descricao}</td>
+          {categorias.map((categoria) => (
+            <tr key={`${categoria.titulo}`}>
+              <td>{categoria.titulo}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <Link to="/">
+      {/* <Link to="/">
         Home
-      </Link>
+      </Link> */}
     </PageDefault>
   );
 }
